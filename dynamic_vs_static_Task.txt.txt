@@ -1,0 +1,31 @@
+#* Unterschied zwischen einem dynamisch und statisch alloziertem Task *#
+
+#Die "stack_size" wird unterschiedlich zugewiesen
+	static: über einem Array
+	dynamisch: direkt
+
+#Bei der statischen Taskerzeugung wird ein Task Control Block zur Kompilezeit initialisiert, welcher den Kontext des Tasks beiinhaltet.
+
+/* Definitions for dynamicTask */
+osThreadId_t dynamicTaskHandle;
+const osThreadAttr_t dynamicTask_attributes = {
+  .name = "dynamicTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+
+/* Definitions for staticTask */
+osThreadId_t staticTaskHandle;
+uint32_t staticTaskBuffer[ 128 ];
+osStaticThreadDef_t staticTaskControlBlock;
+const osThreadAttr_t staticTask_attributes = {
+  .name = "staticTask",
+  .cb_mem = &staticTaskControlBlock,
+  .cb_size = sizeof(staticTaskControlBlock),
+  .stack_mem = &staticTaskBuffer[0],
+  .stack_size = sizeof(staticTaskBuffer),
+  .priority = (osPriority_t) osPriorityLow,
+};
+
+
+
